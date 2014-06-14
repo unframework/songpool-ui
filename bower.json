@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "bluebird": "~2.1.0",
     "requirejs": "~2.1.9",
     "requirejs-text": "~2.0.10",
     "require-cs": "~0.4",
