@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SongPoolFM</title>
+
+    <script type="text/javascript">
+        require = {
+            paths: {
+                'cs': '../bower_components/require-cs/cs',
+                'text': '../bower_components/requirejs-text/text',
+                'coffee-script': '../bower_components/require-cs/coffee-script',
+                'projector': '../bower_components/projector/src/projector',
+                'projectorExpr': '../bower_components/projector/src/projectorExpr',
+                'projectorHtml': '../bower_components/projector/src/projectorHtml'
+            }
+        };
+    </script>
+    <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
+    <script type="text/javascript">
+        require(['cs!projector', 'cs!src/main'], function (projector, main) {
+            projector(main);
+        });
+    </script>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+</html>
