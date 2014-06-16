@@ -12,6 +12,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
     this.app = window.app;
 
     @do = (action, tmpl) ->
+      currentPromise = null
       state = {
         isPending: false
         error: null
@@ -19,13 +20,23 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
           state.isPending = true
 
           # mask validation error
-          validationResult = Promise.resolve(inputValue).catch(-> state.error = null; throw 'validation_error')
+          p = currentPromise = Promise.resolve(
+            inputValue
+          ).catch(->
+            # report overall validation error
+            throw 'validation_error'
+          ).then((value) ->
+            action.call(null, value)
+          ).finally(->
+            if p is currentPromise
+              state.error = null
+              state.isPending = false
+          ).catch((e) ->
+            if p is currentPromise
+              state.error = e
 
-          overallResult = validationResult.then (value) ->
-            # mask the error
-            Promise.resolve(action.call(null, value)).catch((e) -> state.error = e; throw 'action_error')
-
-          overallResult.finally(-> state.isPending = false)
+            throw e
+          )
       }
 
       @fork ->
@@ -50,6 +61,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
         @$action = state
 
         @parameter = (name, paramTmpl) ->
+          currentPromise = null
           paramState = {
             isPending: false
             error: null
@@ -57,13 +69,15 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
               valueGetterMap[name] = ->
                 paramState.isPending = true
 
-                Promise.resolve(
+                p = currentPromise = Promise.resolve(
                   valueGetter()
                 ).finally(->
-                  paramState.error = null
-                  paramState.isPending = false
+                  if p is currentPromise
+                    paramState.error = null
+                    paramState.isPending = false
                 ).catch((e) ->
-                  paramState.error = e
+                  if p is currentPromise
+                    paramState.error = e
                   throw e
                 )
               undefined
