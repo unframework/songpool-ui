@@ -78,7 +78,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
     @meowText = (options) ->
       validator = options.validate or ((v) -> v)
 
-      @element 'label.meow-field', ->
+      @element 'label.meow-field', { hasError: (=> !!@$parameter.error) }, ->
         @element 'span.meow-field__label-text', ->
           @text options.label
         @element 'input[type=text]', ->

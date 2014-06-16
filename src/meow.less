@@ -1,0 +1,36 @@
+
+@outerMargin: 15px;
+
+.meow-field {
+    // @todo local reset
+    display: block;
+
+    margin: @outerMargin 0;
+    padding: 14px 0;
+
+    > .meow-field__label-text {
+        font: 16px/1 'Open Sans', sans;
+        min-height: 1em;
+    }
+
+    > input[type=text] {
+        box-sizing: border-box;
+        width: 100%;
+        border: 1px solid #888;
+        border-radius: 3px;
+        padding: 5px;
+
+        font: 16px/1 'Open Sans', sans;
+    }
+
+    &[has-error=true] > input[type=text] {
+        border-color: #800;
+    }
+
+    > .meow-field__error-text {
+        display: block;
+        height: 0;
+        color: #800;
+        font: 14px/1 'Open Sans', sans;
+    }
+}
