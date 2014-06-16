@@ -48,8 +48,26 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
 
         @parameter = (name, paramTmpl) ->
           @fork ->
+            paramState = {
+              isPending: false
+              error: null
+            }
+
+            @$parameter = paramState
+
             @parameterValue = (valueGetter) ->
-              valueGetterMap[name] = valueGetter
+              valueGetterMap[name] = ->
+                paramState.isPending = true
+
+                Promise.resolve(
+                  valueGetter()
+                ).finally(->
+                  paramState.error = null
+                  paramState.isPending = false
+                ).catch((e) ->
+                  paramState.error = e
+                  throw e
+                )
               undefined
 
             paramTmpl.apply(this)
@@ -58,10 +76,13 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
 
     @meowText = (options, tmpl) ->
       @element 'label.meow-field', ->
-        @element 'span', ->
+        @element 'span.meow-field__label-text', ->
           @text options.label
         @element 'input[type=text]', ->
           tmpl.apply(this)
+        @when (=> @$parameter.error), ->
+          @element 'span.meow-field__error-text', ->
+            @text (=> @$parameter.error)
 
     projectorExpr.install this
     projectorHtml.install this, (element) ->
