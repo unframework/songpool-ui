@@ -101,6 +101,22 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
           @element 'span.meow-field__error-text', ->
             @text (=> @$parameter.error)
 
+    @form = (tmpl) ->
+      @element 'form[action=]', ->
+        onSubmit = (event) =>
+          event.preventDefault()
+
+          if not @$action.isPending
+            resultPromise = @$action.invoke().finally => @refresh()
+            @refresh()
+
+            resultPromise.then(((result) -> console.log 'done', result), ((error) -> console.log 'error', error))
+
+        formElement = @$projectorHtmlCursor()
+        formElement.addEventListener 'submit', onSubmit, false
+
+        tmpl.apply(this)
+
     projectorExpr.install this
     projectorHtml.install this, (element) ->
       # immediately append
@@ -119,19 +135,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
             @element 'div', ->
               @text => @$action.error
 
-          @element 'form[action=]', ->
-            onSubmit = (event) =>
-              event.preventDefault()
-
-              resultPromise = @$action.invoke()
-              @refresh()
-
-              resultPromise.then(((result) -> console.log 'done', result), ((error) -> console.log 'error', error))
-              resultPromise.finally => @refresh()
-
-            formElement = @$projectorHtmlCursor()
-            formElement.addEventListener 'submit', onSubmit, false
-
+          @form ->
             @parameter 'label', -> @meowText label: 'Label', validate: anyText
 
             @element 'button[type=submit]', ->
