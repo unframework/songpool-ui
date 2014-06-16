@@ -1,36 +1,117 @@
 
-@outerMargin: 15px;
+@outerMargin: 20px;
+
+.meow-footer {
+    // @todo local reset
+    display: block;
+
+    margin: @outerMargin 0;
+
+    text-align: right;
+
+    opacity: 1;
+    transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+    transition: opacity 0.2s, transform 0.2s;
+    -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
+
+    &[transition=enter] {
+        opacity: 0.01;
+        transform: translate(0, 20px);
+        -webkit-transform: translate(0, 20px);
+    }
+
+    > button {
+        margin: 0;
+        border: 0;
+        border-radius: 3px;
+        padding: 15px 20px;
+
+        background: #1abc9c;
+        color: #fff;
+        font: 300 18px/1 'Open Sans Condensed', sans;
+
+        cursor: pointer;
+        outline: none;
+
+        border-bottom: 2px solid #16a085;
+
+        &:hover, &:focus {
+            background: lighten(#1abc9c, 2%);
+        }
+
+        &:disabled {
+            transition: background 0.4s, border-color 0.4s;
+            background: #95a5a6;
+            border-bottom-color: #7f8c8d;
+        }
+    }
+}
 
 .meow-field {
     // @todo local reset
     display: block;
 
     margin: @outerMargin 0;
-    padding: 14px 0;
+
+    opacity: 1;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    transition: opacity 0.1s ease-in, transform 0.1s ease-out;
+    -webkit-transition: opacity 0.1s ease-in, -webkit-transform 0.1s ease-out;
+
+    &[transition=enter] {
+        opacity: 0.01;
+        transform: scale(1.2);
+        -webkit-transform: scale(1.2);
+    }
 
     > .meow-field__label-text {
-        font: 16px/1 'Open Sans', sans;
+        color: #2c3e50;
+        font: 300 18px/1 'Open Sans Condensed', sans;
         min-height: 1em;
     }
 
     > input[type=text] {
         box-sizing: border-box;
         width: 100%;
-        border: 1px solid #888;
+        border: 2px solid #1abc9c;
         border-radius: 3px;
         padding: 5px;
 
-        font: 16px/1 'Open Sans', sans;
+        color: #2c3e50;
+        font: 300 16px/1 'Open Sans', sans;
+
+        cursor: pointer;
+        outline: none;
+
+        &:focus {
+            border-color: #16a085;
+        }
     }
 
     &[has-error=true] > input[type=text] {
-        border-color: #800;
+        border-color: #c0392b;
     }
 
     > .meow-field__error-text {
         display: block;
         height: 0;
-        color: #800;
-        font: 14px/1 'Open Sans', sans;
+        color: #c0392b;
+        font: 300 14px/1 'Open Sans', sans;
+
+        text-align: right;
+
+        opacity: 1;
+        transform: translate(0, 0);
+        -webkit-transform: translate(0, 0);
+        transition: opacity 0.2s, transform 0.2s;
+        -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
+
+        &[transition=enter] {
+            opacity: 0.01;
+            transform: translate(0, 20px);
+            -webkit-transform: translate(0, 20px);
+        }
     }
 }

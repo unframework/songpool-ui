@@ -89,31 +89,50 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
 
         tmpl.apply(this)
 
+    @transitionIn = ->
+      dom = @html()
+      dom.setAttribute 'transition', 'enter'
+      setTimeout (-> dom.setAttribute 'transition', null), 0
+
+    @meowHeader = () ->
+      @element 'div.meow-header', ->
+        @when (=> @$action.error), ->
+          @element 'div.meow-header__error-text', ->
+            @transitionIn()
+            @text => @$action.error
+
+    @meowFooter = (options) ->
+      options = options or {}
+      submitText = options.submit or 'Submit'
+
+      @element 'div.meow-footer', ->
+        @transitionIn()
+
+        @element 'button[type=submit]', { disabled: => if @$action.isPending then 'disabled' else null }, ->
+          @text submitText
+
     @meowText = (options) ->
       validator = options.validate or ((v) -> v)
 
       @element 'label.meow-field', { hasError: (=> !!@$parameter.error) }, ->
+        @transitionIn()
+
         @element 'span.meow-field__label-text', ->
           @text options.label
         @element 'input[type=text]', ->
           @$parameter.value => validator @value()
         @when (=> @$parameter.error), ->
           @element 'span.meow-field__error-text', ->
+            @transitionIn()
             @text (=> @$parameter.error)
 
     @form = (tmpl) ->
       @element 'form[action=]', ->
-        onSubmit = (event) =>
-          event.preventDefault()
-
+        @on 'submit', { preventDefault: true }, =>
           if not @$action.isPending
-            resultPromise = @$action.invoke().finally => @refresh()
-            @refresh()
-
-            resultPromise.then(((result) -> console.log 'done', result), ((error) -> console.log 'error', error))
-
-        formElement = @$projectorHtmlCursor()
-        formElement.addEventListener 'submit', onSubmit, false
+            @$action.invoke().finally =>
+              @refresh()
+            .then(((result) -> console.log 'done', result), ((error) -> console.log 'error', error))
 
         tmpl.apply(this)
 
@@ -128,15 +147,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
         eventualError 'action_result:' + JSON.stringify(data)
       , ->
         @withParameterMap ->
-          @element 'div', ->
-            @text => if @$action.isPending then 'Submitting...' else 'Ready'
-
-          @when (=> @$action.error), ->
-            @element 'div', ->
-              @text => @$action.error
-
           @form ->
+            @meowHeader()
             @parameter 'label', -> @meowText label: 'Label', validate: anyText
-
-            @element 'button[type=submit]', ->
-              @text 'Yep'
+            @meowFooter()
