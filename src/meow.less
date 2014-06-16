@@ -94,11 +94,15 @@
         border-color: #c0392b;
     }
 
+    &[is-pending=true] > input[type=text] {
+        border-color: #95a5a6;
+    }
+
     > .meow-field__error-text {
         display: block;
         height: 0;
         color: #c0392b;
-        font: 300 14px/1 'Open Sans', sans;
+        font: 700 14px/1 'Open Sans', sans;
 
         text-align: right;
 

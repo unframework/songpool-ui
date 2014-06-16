@@ -18,6 +18,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
         error: null
         invoke: (inputValue) ->
           state.isPending = true
+          state.error = null
 
           # mask validation error
           p = currentPromise = Promise.resolve(
@@ -29,7 +30,6 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
             action.call(null, value)
           ).finally(->
             if p is currentPromise
-              state.error = null
               state.isPending = false
           ).catch((e) ->
             if p is currentPromise
@@ -61,6 +61,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
         @$action = state
 
         @parameter = (name, paramTmpl) ->
+          viewModel = this
           currentPromise = null
           paramState = {
             isPending: false
@@ -68,12 +69,12 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
             value: (valueGetter) ->
               valueGetterMap[name] = ->
                 paramState.isPending = true
+                paramState.error = null
 
                 p = currentPromise = Promise.resolve(
                   valueGetter()
                 ).finally(->
                   if p is currentPromise
-                    paramState.error = null
                     paramState.isPending = false
                 ).catch((e) ->
                   if p is currentPromise
@@ -114,7 +115,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
     @meowText = (options) ->
       validator = options.validate or ((v) -> v)
 
-      @element 'label.meow-field', { hasError: (=> !!@$parameter.error) }, ->
+      @element 'label.meow-field', { hasError: (=> !!@$parameter.error), isPending: (=> !!@$parameter.isPending) }, ->
         @transitionIn()
 
         @element 'span.meow-field__label-text', ->
