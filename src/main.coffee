@@ -56,6 +56,13 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
 
         tmpl.apply(this)
 
+    @meowText = (options, tmpl) ->
+      @element 'label.meow-field', ->
+        @element 'span', ->
+          @text options.label
+        @element 'input[type=text]', ->
+          tmpl.apply(this)
+
     projectorExpr.install this
     projectorHtml.install this, (element) ->
       # immediately append
@@ -88,7 +95,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
             formElement.addEventListener 'submit', onSubmit, false
 
             @parameter 'label', ->
-              @element 'input', ->
+              @meowText label: 'Label', ->
                 @parameterValue => v = @value(); if v then eventualValue v else eventualError 'NOPE'
 
             @element 'button[type=submit]', ->
