@@ -4,6 +4,7 @@ var serve = require('gulp-serve');
 var less = require('gulp-less');
 var concat = require('gulp-concat');
 var livereload = require('gulp-livereload');
+var plumber = require('gulp-plumber');
 var rimraf = require('rimraf');
 
 var stylesSrc = 'src/**/*.less';
@@ -14,6 +15,7 @@ gulp.task('clean', function(cb) {
 
 gulp.task('styles', ['clean'], function() {
     return gulp.src(stylesSrc)
+        .pipe(plumber())
         .pipe(less())
         .pipe(concat('styles.css'))
         .pipe(gulp.dest('build'))
