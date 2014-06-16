@@ -47,15 +47,10 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
         @$action = state
 
         @parameter = (name, paramTmpl) ->
-          @fork ->
-            paramState = {
-              isPending: false
-              error: null
-            }
-
-            @$parameter = paramState
-
-            @parameterValue = (valueGetter) ->
+          paramState = {
+            isPending: false
+            error: null
+            value: (valueGetter) ->
               valueGetterMap[name] = ->
                 paramState.isPending = true
 
@@ -69,7 +64,10 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
                   throw e
                 )
               undefined
+          }
 
+          @fork ->
+            @$parameter = paramState
             paramTmpl.apply(this)
 
         tmpl.apply(this)
@@ -117,7 +115,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
 
             @parameter 'label', ->
               @meowText label: 'Label', ->
-                @parameterValue => v = @value(); if v then eventualValue v else eventualError 'NOPE'
+                @$parameter.value => v = @value(); if v then eventualValue v else eventualError 'NOPE'
 
             @element 'button[type=submit]', ->
               @text 'Yep'
