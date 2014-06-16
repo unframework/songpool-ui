@@ -5,6 +5,9 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
   eventualError = (v) ->
     new Promise((resolve, reject) -> setTimeout (-> reject(v)), 500)
 
+  anyText = (v) ->
+    if v then eventualValue v else eventualError 'NOPE'
+
   ->
     this.app = window.app;
 
@@ -72,12 +75,14 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
 
         tmpl.apply(this)
 
-    @meowText = (options, tmpl) ->
+    @meowText = (options) ->
+      validator = options.validate or ((v) -> v)
+
       @element 'label.meow-field', ->
         @element 'span.meow-field__label-text', ->
           @text options.label
         @element 'input[type=text]', ->
-          tmpl.apply(this)
+          @$parameter.value => validator @value()
         @when (=> @$parameter.error), ->
           @element 'span.meow-field__error-text', ->
             @text (=> @$parameter.error)
@@ -113,9 +118,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
             formElement = @$projectorHtmlCursor()
             formElement.addEventListener 'submit', onSubmit, false
 
-            @parameter 'label', ->
-              @meowText label: 'Label', ->
-                @$parameter.value => v = @value(); if v then eventualValue v else eventualError 'NOPE'
+            @parameter 'label', -> @meowText label: 'Label', validate: anyText
 
             @element 'button[type=submit]', ->
               @text 'Yep'
