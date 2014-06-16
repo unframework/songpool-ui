@@ -1,6 +1,20 @@
 
 @outerMargin: 20px;
 
+.meow-enter-transition(@startOpacity, @startTransform, @duration) {
+    opacity: 1;
+    transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+    transition: opacity @duration, transform @duration;
+    -webkit-transition: opacity @duration, -webkit-transform @duration;
+
+    &[transition=enter] {
+        opacity: @startOpacity;
+        transform: @startTransform;
+        -webkit-transform: @startTransform;
+    }
+}
+
 .meow-footer {
     // @todo local reset
     display: block;
@@ -9,17 +23,7 @@
 
     text-align: right;
 
-    opacity: 1;
-    transform: translate(0, 0);
-    -webkit-transform: translate(0, 0);
-    transition: opacity 0.2s, transform 0.2s;
-    -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
-
-    &[transition=enter] {
-        opacity: 0.01;
-        transform: translate(0, 20px);
-        -webkit-transform: translate(0, 20px);
-    }
+    .meow-enter-transition(0.01, translate(0, 20px), 0.2s);
 
     > .meow-footer__error-container {
         display: inline-block;
@@ -33,17 +37,7 @@
             color: #c0392b;
             font: 700 14px/1 'Open Sans', sans;
 
-            opacity: 1;
-            transform: translate(0, 0);
-            -webkit-transform: translate(0, 0);
-            transition: opacity 0.4s, transform 0.4s;
-            -webkit-transition: opacity 0.4s, -webkit-transform 0.4s;
-
-            &[transition=enter] {
-                opacity: 0.01;
-                transform: translate(100%, 0);
-                -webkit-transform: translate(100%, 0);
-            }
+            .meow-enter-transition(0.01, translate(100%, 0), 0.4s);
         }
     }
 
@@ -80,17 +74,7 @@
 
     margin: @outerMargin 0;
 
-    opacity: 1;
-    transform: scale(1);
-    -webkit-transform: scale(1);
-    transition: opacity 0.1s ease-in, transform 0.1s ease-out;
-    -webkit-transition: opacity 0.1s ease-in, -webkit-transform 0.1s ease-out;
-
-    &[transition=enter] {
-        opacity: 0.01;
-        transform: scale(1.2);
-        -webkit-transform: scale(1.2);
-    }
+    .meow-enter-transition(0.01, scale(1.2), 0.1s);
 
     > .meow-field__label-text {
         color: #2c3e50;
@@ -132,16 +116,6 @@
 
         text-align: right;
 
-        opacity: 1;
-        transform: translate(0, 0);
-        -webkit-transform: translate(0, 0);
-        transition: opacity 0.2s, transform 0.2s;
-        -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
-
-        &[transition=enter] {
-            opacity: 0.01;
-            transform: translate(0, 20px);
-            -webkit-transform: translate(0, 20px);
-        }
+        .meow-enter-transition(0.01, translate(0, 20px), 0.2s);
     }
 }
