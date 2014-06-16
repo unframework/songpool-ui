@@ -21,6 +21,32 @@
         -webkit-transform: translate(0, 20px);
     }
 
+    > .meow-footer__error-container {
+        display: inline-block;
+        overflow: hidden;
+        margin: 0;
+
+        > .meow-footer__error-text {
+            display: block;
+            padding-right: @outerMargin;
+
+            color: #c0392b;
+            font: 700 14px/1 'Open Sans', sans;
+
+            opacity: 1;
+            transform: translate(0, 0);
+            -webkit-transform: translate(0, 0);
+            transition: opacity 0.4s, transform 0.4s;
+            -webkit-transition: opacity 0.4s, -webkit-transform 0.4s;
+
+            &[transition=enter] {
+                opacity: 0.01;
+                transform: translate(100%, 0);
+                -webkit-transform: translate(100%, 0);
+            }
+        }
+    }
+
     > button {
         margin: 0;
         border: 0;

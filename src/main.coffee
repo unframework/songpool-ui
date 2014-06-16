@@ -96,11 +96,6 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
       setTimeout (-> dom.setAttribute 'transition', null), 0
 
     @meowHeader = () ->
-      @element 'div.meow-header', ->
-        @when (=> @$action.error), ->
-          @element 'div.meow-header__error-text', ->
-            @transitionIn()
-            @text => @$action.error
 
     @meowFooter = (options) ->
       options = options or {}
@@ -108,6 +103,12 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
 
       @element 'div.meow-footer', ->
         @transitionIn()
+
+        @element 'div.meow-footer__error-container', ->
+          @when (=> @$action.error), ->
+            @element 'div.meow-footer__error-text', ->
+              @transitionIn()
+              @text => @$action.error
 
         @element 'button[type=submit]', { disabled: => if @$action.isPending then 'disabled' else null }, ->
           @text submitText
