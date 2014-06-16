@@ -46,9 +46,13 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
       @fork ->
         @$action = state
 
-        @attachParameter = (name, valueGetter) ->
-          valueGetterMap[name] = valueGetter
-          undefined
+        @parameter = (name, paramTmpl) ->
+          @fork ->
+            @parameterValue = (valueGetter) ->
+              valueGetterMap[name] = valueGetter
+              undefined
+
+            paramTmpl.apply(this)
 
         tmpl.apply(this)
 
@@ -83,8 +87,9 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr'], (Promise, projector
             formElement = @$projectorHtmlCursor()
             formElement.addEventListener 'submit', onSubmit, false
 
-            @element 'input', ->
-              @attachParameter 'label', => v = @value(); if v then eventualValue v else eventualError 'NOPE'
+            @parameter 'label', ->
+              @element 'input', ->
+                @parameterValue => v = @value(); if v then eventualValue v else eventualError 'NOPE'
 
             @element 'button[type=submit]', ->
               @text 'Yep'
