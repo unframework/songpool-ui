@@ -3,6 +3,7 @@ var gulp = require('gulp');
 var serve = require('gulp-serve');
 var less = require('gulp-less');
 var concat = require('gulp-concat');
+var livereload = require('gulp-livereload');
 var rimraf = require('rimraf');
 
 var stylesSrc = 'src/**/*.less';
@@ -15,7 +16,8 @@ gulp.task('styles', ['clean'], function() {
     return gulp.src(stylesSrc)
         .pipe(less())
         .pipe(concat('styles.css'))
-        .pipe(gulp.dest('build'));
+        .pipe(gulp.dest('build'))
+        .pipe(livereload());
 });
 
 gulp.task('serve', serve({
