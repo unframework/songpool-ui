@@ -39,7 +39,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction'
       @action (data) ->
         eventualError 'action_result:' + JSON.stringify(data)
       , ->
-        @withParameterMap ->
+        @parameterMap ->
           @form ->
             @meowHeader()
             @parameter 'label', -> @meowText label: 'Label', validate: anyText

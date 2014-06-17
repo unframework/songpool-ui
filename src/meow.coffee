@@ -27,7 +27,7 @@
         @element 'span.meow-field__label-text', ->
           @text options.label
         @element 'input[type=text]', ->
-          @$parameter.value => validator @value()
+          @commit => validator @value()
         @when (=> @$parameter.error), ->
           @element 'span.meow-field__error-text', ->
             @transitionIn()

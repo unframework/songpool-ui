@@ -2,16 +2,18 @@
   (viewModel) ->
     viewModel.action = (action, tmpl) ->
       currentPromise = null
+      currentValueGetter = (->)
+
       state = {
         isPending: false
         error: null
-        invoke: (inputValue) ->
+
+        invoke: ->
           state.isPending = true
           state.error = null
 
-          # mask validation error
           p = currentPromise = Promise.resolve(
-            inputValue
+            currentValueGetter()
           ).catch(->
             # report overall validation error
             throw 'validation_error'
@@ -30,32 +32,33 @@
 
       @fork ->
         @$action = state
+        @commit = (valueGetter) ->
+          currentValueGetter = valueGetter
+          undefined
+
         tmpl.apply(this)
 
-    viewModel.withParameterMap = (tmpl) ->
+    viewModel.parameterMap = (tmpl) ->
       valueGetterMap = Object.create(null)
 
-      # intercept action invoker
-      parentInvoke = @$action.invoke
-
-      state = Object.create(@$action)
-
-      state.invoke = () ->
+      @commit ->
         valueMap = Object.create(null)
         valueMap[k] = getter() for own k, getter of valueGetterMap
 
-        parentInvoke.call(null, Promise.props(valueMap))
+        Promise.props(valueMap)
 
       @fork ->
-        @$action = state
-
         @parameter = (name, paramTmpl) ->
           viewModel = this
           currentPromise = null
           paramState = {
             isPending: false
             error: null
-            value: (valueGetter) ->
+          }
+
+          @fork ->
+            @$parameter = paramState
+            @commit = (valueGetter) ->
               valueGetterMap[name] = ->
                 paramState.isPending = true
                 paramState.error = null
@@ -71,10 +74,7 @@
                   throw e
                 )
               undefined
-          }
 
-          @fork ->
-            @$parameter = paramState
             paramTmpl.apply(this)
 
         tmpl.apply(this)
