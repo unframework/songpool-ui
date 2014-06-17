@@ -2,7 +2,7 @@
   (viewModel) ->
     validationError = {}
 
-    createStateTracker = (state, valueGetter) ->
+    createStateTracker = (viewModel, state, valueGetter) ->
       currentPromise = null
       ->
         state.isPending = true
@@ -10,16 +10,18 @@
 
         p = currentPromise = Promise.resolve(
           valueGetter()
-        ).finally(->
-          if p is currentPromise
-            state.isPending = false
         ).catch((e) ->
           if p is currentPromise
             state.error = e
           throw e
+        ).finally(->
+          if p is currentPromise
+            state.isPending = false
+            viewModel.refresh()
         )
 
     viewModel.action = (action, tmpl) ->
+      viewModel = this
       currentPromise = null
       currentValueGetter = (->)
 
@@ -38,14 +40,15 @@
             throw validationError
           ).then((value) ->
             action.call(null, value)
-          ).finally(->
-            if p is currentPromise
-              state.isPending = false
           ).catch((e) ->
             if p is currentPromise
               state.error = e
 
             throw e
+          ).finally(->
+            if p is currentPromise
+              state.isPending = false
+              viewModel.refresh()
           )
       }
 
@@ -71,6 +74,7 @@
 
       @fork ->
         @parameter = (name, paramTmpl) ->
+          viewModel = this
           paramState = {
             isPending: false
             error: null
@@ -79,7 +83,7 @@
           @fork ->
             @$parameter = paramState
             @commit = (valueGetter) ->
-              valueGetterMap[name] = createStateTracker paramState, valueGetter
+              valueGetterMap[name] = createStateTracker viewModel, paramState, valueGetter
               undefined
 
             paramTmpl.apply(this)
@@ -100,6 +104,7 @@
         }
 
         @parameter = (paramTmpl) ->
+          viewModel = this
           addItem = =>
             index = itemStatusList.length
 
@@ -119,7 +124,7 @@
             @fork ->
               @$parameter = paramState
               @commit = (valueGetter) ->
-                valueGetterList[index] = createStateTracker paramState, valueGetter
+                valueGetterList[index] = createStateTracker viewModel, paramState, valueGetter
                 undefined
 
               paramTmpl.call(this)

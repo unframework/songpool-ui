@@ -6,7 +6,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction'
     new Promise((resolve, reject) -> setTimeout (-> reject(v)), 500)
 
   anyText = (v) ->
-    if v then eventualValue v else eventualError 'NOPE'
+    if v then eventualValue v else eventualError 'Error:' + Math.random()
 
   ->
     this.app = window.app;
@@ -20,8 +20,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction'
       @element 'form[action=]', ->
         @on 'submit', { preventDefault: true }, =>
           if not @$action.isPending
-            @$action.invoke().finally =>
-              @refresh()
+            @$action.invoke()
             .then(((result) -> console.log 'done', result), ((error) -> console.log 'error', error))
 
         tmpl.apply(this)
