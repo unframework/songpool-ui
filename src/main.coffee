@@ -26,9 +26,9 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction'
 
         tmpl.apply(this)
 
-    projectorExpr.install this
-    projectorAction(this)
-    projectorHtml.install this, (element) ->
+    projectorExpr this
+    projectorAction this
+    projectorHtml this, (element) ->
       # immediately append
       # @todo this could be saved for later appending elsewhere, too
       document.getElementById('container').appendChild(element)
