@@ -1,4 +1,4 @@
-define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!do', 'cs!meow'], (Promise, projectorHtml, projectorExpr, projectorDo, meow) ->
+define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction', 'cs!meow'], (Promise, projectorHtml, projectorExpr, projectorAction, meow) ->
   eventualValue = (v) ->
     new Promise((resolve, reject) -> setTimeout (-> resolve(v)), 500)
 
@@ -27,16 +27,16 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!do', 'cs!meow'],
         tmpl.apply(this)
 
     projectorExpr.install this
+    projectorAction(this)
     projectorHtml.install this, (element) ->
       # immediately append
       # @todo this could be saved for later appending elsewhere, too
       document.getElementById('container').appendChild(element)
 
-    projectorDo(this)
     meow(this)
 
     @element 'div', ->
-      @do (data) ->
+      @action (data) ->
         eventualError 'action_result:' + JSON.stringify(data)
       , ->
         @withParameterMap ->

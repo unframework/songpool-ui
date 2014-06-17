@@ -1,6 +1,6 @@
-(if define? then define else ((defs, module) -> window.projectorDo = module(window.bluebird)))(['bluebird'], (Promise) ->
+(if define? then define else ((defs, module) -> window.projectorAction = module(window.bluebird)))(['bluebird'], (Promise) ->
   (viewModel) ->
-    viewModel.do = (action, tmpl) ->
+    viewModel.action = (action, tmpl) ->
       currentPromise = null
       state = {
         isPending: false
