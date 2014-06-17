@@ -85,4 +85,44 @@
             paramTmpl.apply(this)
 
         tmpl.apply(this)
+
+    viewModel.parameterSet = (tmpl) ->
+      itemStatusList = []
+      valueGetterList = []
+      addItem = null
+
+      @commit ->
+        Promise.all(valueGetterList[i]() for i in [0...itemStatusList.length] by 1 when itemStatusList[i])
+
+      @fork ->
+        @$parameterSet = {
+          add: -> addItem()
+        }
+
+        @parameter = (paramTmpl) ->
+          addItem = =>
+            index = itemStatusList.length
+
+            paramState = {
+              isPending: false
+              error: null
+
+              isRemoved: ->
+                !itemStatusList[index]
+
+              remove: ->
+                itemStatusList[index] = false
+            }
+
+            itemStatusList.push true
+
+            @fork ->
+              @$parameter = paramState
+              @commit = (valueGetter) ->
+                valueGetterList[index] = createStateTracker paramState, valueGetter
+                undefined
+
+              paramTmpl.call(this)
+
+        tmpl.call(this)
 )

@@ -43,4 +43,21 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction'
           @form ->
             @meowHeader()
             @parameter 'label', -> @meowText label: 'Label', validate: anyText
+
+            @parameter 'tagList', ->
+              @parameterSet ->
+
+                @region (->), ->
+                  @parameter ->
+                    @region @$parameter.isRemoved, (isRemoved) ->
+                      if !isRemoved
+                        @element 'button[type=button]', ->
+                          @on 'click', => @$parameter.remove()
+                          @text '[item]'
+                        @commit -> 'a'
+
+                @element 'button[type=button]', ->
+                  @on 'click', => @$parameterSet.add()
+                  @text '+'
+
             @meowFooter()
