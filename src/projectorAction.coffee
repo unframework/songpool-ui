@@ -2,6 +2,23 @@
   (viewModel) ->
     validationError = {}
 
+    createStateTracker = (state, valueGetter) ->
+      currentPromise = null
+      ->
+        state.isPending = true
+        state.error = null
+
+        p = currentPromise = Promise.resolve(
+          valueGetter()
+        ).finally(->
+          if p is currentPromise
+            state.isPending = false
+        ).catch((e) ->
+          if p is currentPromise
+            state.error = e
+          throw e
+        )
+
     viewModel.action = (action, tmpl) ->
       currentPromise = null
       currentValueGetter = (->)
@@ -54,8 +71,6 @@
 
       @fork ->
         @parameter = (name, paramTmpl) ->
-          viewModel = this
-          currentPromise = null
           paramState = {
             isPending: false
             error: null
@@ -64,20 +79,7 @@
           @fork ->
             @$parameter = paramState
             @commit = (valueGetter) ->
-              valueGetterMap[name] = ->
-                paramState.isPending = true
-                paramState.error = null
-
-                p = currentPromise = Promise.resolve(
-                  valueGetter()
-                ).finally(->
-                  if p is currentPromise
-                    paramState.isPending = false
-                ).catch((e) ->
-                  if p is currentPromise
-                    paramState.error = e
-                  throw e
-                )
+              valueGetterMap[name] = createStateTracker paramState, valueGetter
               undefined
 
             paramTmpl.apply(this)
