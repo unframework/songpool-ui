@@ -11,6 +11,6 @@
     "requirejs": "~2.1.9",
     "requirejs-text": "~2.0.10",
     "require-cs": "~0.4",
-    "projector": "~0.4.0"
+    "projector": "~0.5.0"
   }
 }

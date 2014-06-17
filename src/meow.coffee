@@ -1,4 +1,7 @@
 (if define? then define else ((module) -> window.meow = module()))(->
+  timeout = (time) ->
+    new Promise((resolve) -> setTimeout (-> resolve()), time)
+
   (viewModel) ->
     viewModel.meowHeader = () ->
 
@@ -50,12 +53,17 @@
                 if !isRemoved
                   @element 'li', ->
                     @transitionIn()
+                    dom = @html()
 
                     @element 'div', ->
                       itemTmpl.call(this)
                     @element 'div', ->
                       @element 'button[type=button]', ->
-                        @on 'click', => @$parameter.remove()
+                        @on 'click', =>
+                          @$parameter.remove()
+
+                          dom.setAttribute 'transition', 'leave'
+                          @$region.waitUntil timeout(300)
                         @text removeText
 
         @element 'footer', ->
