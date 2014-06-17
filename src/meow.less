@@ -1,6 +1,32 @@
 
 @outerMargin: 20px;
 
+.meow-button() {
+    border: 0;
+    border-radius: 3px;
+    padding: 15px 20px;
+
+    background: #1abc9c;
+    color: #fff;
+    font: 300 18px/1 'Open Sans Condensed', sans;
+    white-space: nowrap;
+
+    cursor: pointer;
+    outline: none;
+
+    border-bottom: 2px solid #16a085;
+
+    &:hover, &:focus {
+        background: lighten(#1abc9c, 2%);
+    }
+
+    &:disabled {
+        transition: background 0.4s, border-color 0.4s;
+        background: #95a5a6;
+        border-bottom-color: #7f8c8d;
+    }
+}
+
 .meow-enter-transition(@startOpacity, @startTransform, @duration) {
     opacity: 1;
     transform: translate(0, 0);
@@ -49,28 +75,7 @@
         display: table-cell;
 
         margin: 0;
-        border: 0;
-        border-radius: 3px;
-        padding: 15px 20px;
-
-        background: #1abc9c;
-        color: #fff;
-        font: 300 18px/1 'Open Sans Condensed', sans;
-
-        cursor: pointer;
-        outline: none;
-
-        border-bottom: 2px solid #16a085;
-
-        &:hover, &:focus {
-            background: lighten(#1abc9c, 2%);
-        }
-
-        &:disabled {
-            transition: background 0.4s, border-color 0.4s;
-            background: #95a5a6;
-            border-bottom-color: #7f8c8d;
-        }
+        .meow-button();
     }
 }
 
@@ -123,5 +128,56 @@
         text-align: right;
 
         .meow-enter-transition(0.01, translate(0, 20px), 0.2s);
+    }
+}
+
+.meow-list {
+    // @todo local reset
+    display: block;
+
+    margin: @outerMargin 0;
+
+    > ul > li {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+
+        padding-bottom: @outerMargin / 2 - 1px;
+        margin-bottom: @outerMargin / 2 - 1px;
+        border-bottom: 2px solid #95a5a6;
+
+        .meow-enter-transition(0.01, translate(-100%, 0) scale(0.5), 0.2s);
+
+        > div {
+            display: table-cell;
+            vertical-align: middle;
+
+            &::before {
+                content: '';
+                display: block;
+                margin: -@outerMargin 0 @outerMargin;
+            }
+
+            &::after {
+                content: '';
+                display: block;
+                margin: @outerMargin 0 -@outerMargin;
+            }
+        }
+
+        > div:last-child {
+            text-align: right;
+        }
+
+        > div > button {
+            margin: 0;
+            .meow-button();
+        }
+    }
+
+    > footer {
+        > button {
+            .meow-button();
+        }
     }
 }

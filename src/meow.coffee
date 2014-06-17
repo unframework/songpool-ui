@@ -36,4 +36,30 @@
           @element 'span.meow-field__error-text', ->
             @transitionIn()
             @text (=> @$parameter.error)
+
+    viewModel.meowList = (options, itemTmpl) ->
+      validator = options.validate or ((v) -> v)
+      addText = options.add or 'Add Item'
+      removeText = options.remove or 'Remove'
+
+      @element 'div.meow-list', ->
+        @element 'ul', ->
+          @region (->), ->
+            @parameter ->
+              @region @$parameter.isRemoved, (isRemoved) ->
+                if !isRemoved
+                  @element 'li', ->
+                    @transitionIn()
+
+                    @element 'div', ->
+                      itemTmpl.call(this)
+                    @element 'div', ->
+                      @element 'button[type=button]', ->
+                        @on 'click', => @$parameter.remove()
+                        @text removeText
+
+        @element 'footer', ->
+          @element 'button[type=button]', ->
+            @on 'click', => @$parameterSet.add()
+            @text addText
 )
