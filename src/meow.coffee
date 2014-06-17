@@ -5,6 +5,7 @@
     viewModel.meowFooter = (options) ->
       options = options or {}
       submitText = options.submit or 'Submit'
+      validationErrorText = options.validationError or 'Some fields were entered incorrectly'
 
       @element 'div.meow-footer', ->
         @transitionIn()
@@ -13,7 +14,10 @@
           @when (=> @$action.error), ->
             @element 'div.meow-footer__error-text', ->
               @transitionIn()
-              @text => @$action.error
+              @text =>
+                if @action.isValidationError(@$action.error)
+                then validationErrorText
+                else @$action.error
 
         @element 'button[type=submit]', { disabled: => if @$action.isPending then 'disabled' else null }, ->
           @text submitText

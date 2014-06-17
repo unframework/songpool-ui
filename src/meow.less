@@ -21,14 +21,18 @@
 
     margin: @outerMargin 0;
 
+    display: table;
+    table-layout: fixed;
     text-align: right;
 
     .meow-enter-transition(0.01, translate(0, 20px), 0.2s);
 
     > .meow-footer__error-container {
-        display: inline-block;
+        display: table-cell;
         overflow: hidden;
-        margin: 0;
+        vertical-align: middle;
+
+        width: 100%;
 
         > .meow-footer__error-text {
             display: block;
@@ -42,6 +46,8 @@
     }
 
     > button {
+        display: table-cell;
+
         margin: 0;
         border: 0;
         border-radius: 3px;

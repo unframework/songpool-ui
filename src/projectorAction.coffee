@@ -1,5 +1,7 @@
 (if define? then define else ((defs, module) -> window.projectorAction = module(window.bluebird)))(['bluebird'], (Promise) ->
   (viewModel) ->
+    validationError = {}
+
     viewModel.action = (action, tmpl) ->
       currentPromise = null
       currentValueGetter = (->)
@@ -16,7 +18,7 @@
             currentValueGetter()
           ).catch(->
             # report overall validation error
-            throw 'validation_error'
+            throw validationError
           ).then((value) ->
             action.call(null, value)
           ).finally(->
@@ -37,6 +39,9 @@
           undefined
 
         tmpl.apply(this)
+
+    viewModel.action.isValidationError = (e) ->
+      e is validationError
 
     viewModel.parameterMap = (tmpl) ->
       valueGetterMap = Object.create(null)
