@@ -6,15 +6,10 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction'
     new Promise((resolve, reject) -> setTimeout (-> reject(v)), 500)
 
   anyText = (v) ->
-    if v then eventualValue v else eventualError 'Error:' + Math.random()
+    if v then eventualValue v else eventualError 'Please enter a value'
 
   ->
     this.app = window.app;
-
-    @transitionIn = ->
-      dom = @html()
-      dom.setAttribute 'transition', 'enter'
-      setTimeout (-> dom.setAttribute 'transition', null), 0
 
     @form = (tmpl) ->
       @element 'form[action=]', ->

@@ -102,6 +102,8 @@
 }
 
 .meow-field {
+    position: relative;
+
     // @todo local reset
     display: block;
 
@@ -142,10 +144,14 @@
     }
 
     > .meow-field__error-text {
-        display: block;
-        height: 0;
+        position: absolute;
+        display: block; // helps default placement
         color: #c0392b;
-        font: 700 14px/1 'Open Sans', sans;
+        font: 700 12px/1 'Open Sans', sans;
+
+        border-radius: 3px;
+        padding: 2px;
+        background: #fff;
 
         text-align: right;
 
