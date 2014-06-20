@@ -12,3 +12,65 @@ body {
 #container {
     width: 350px;
 }
+
+.stopwatch {
+    margin: 20px 0;
+
+    > .stopwatch__time {
+        display: inline-block;
+        border: 2px solid #7f8c8d;
+        border-radius: 5px;
+        padding: (10px - 2px) 20px;
+
+        font: 300 30px/1 'Open Sans', sans;
+        color: #7f8c8d;
+
+        vertical-align: middle;
+    }
+
+    > button {
+        margin: 0 0 0 10px;
+        border: 0;
+        border-radius: 3px;
+        padding: 15px 20px;
+
+        vertical-align: middle;
+
+        background: #1abc9c;
+        color: #fff;
+        font: 300 18px/1 'Open Sans Condensed', sans;
+        white-space: nowrap;
+
+        cursor: pointer;
+        outline: none;
+
+        border-bottom: 2px solid #16a085;
+
+        &:hover, &:focus {
+            background: lighten(#1abc9c, 2%);
+        }
+
+        &:disabled {
+            transition: background 0.4s, border-color 0.4s;
+            background: #95a5a6;
+            border-bottom-color: #7f8c8d;
+        }
+    }
+
+    > .stopwatch__toggle {
+        background: #3498db;
+        border-bottom-color: #2980b9;
+
+        &:hover, &:focus {
+            background: lighten(#3498db, 4%);
+        }
+    }
+    > .stopwatch__reset {
+        background: #e74c3c;
+        border-bottom-color: #c0392b;
+
+        &:hover, &:focus {
+            background: lighten(#e74c3c, 3%);
+        }
+    }
+}
