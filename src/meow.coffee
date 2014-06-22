@@ -5,7 +5,7 @@
   transitionIn = ->
     dom = @html()
     dom.setAttribute 'transition', 'enter'
-    setTimeout (-> dom.setAttribute 'transition', null), 0
+    setTimeout (-> dom.setAttribute 'transition', null), 20 # zero delay is too little sometimes
 
   (viewModel) ->
     viewModel.meowHeader = () ->
