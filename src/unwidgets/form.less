@@ -1,7 +1,7 @@
 
 @outerMargin: 20px;
 
-.meow-button() {
+.unwidgets-form-button() {
     border: 0;
     border-radius: 3px;
     padding: 15px 20px;
@@ -27,7 +27,7 @@
     }
 }
 
-.meow-enter-transition(@startOpacity, @startTransform, @duration) {
+.unwidgets-form-enter-transition(@startOpacity, @startTransform, @duration) {
     opacity: 1;
     transform: translate(0, 0);
     -webkit-transform: translate(0, 0);
@@ -41,7 +41,7 @@
     }
 }
 
-.meow-transition(@startOpacity, @startTransform, @startDuration, @endOpacity, @endTransform, @endDuration) {
+.unwidgets-form-transition(@startOpacity, @startTransform, @startDuration, @endOpacity, @endTransform, @endDuration) {
     opacity: 1;
     transform: translate(0, 0);
     -webkit-transform: translate(0, 0);
@@ -63,7 +63,7 @@
     }
 }
 
-.meow-footer {
+.unwidgets-form-footer {
     // @todo local reset
     display: block;
 
@@ -73,23 +73,23 @@
     table-layout: fixed;
     text-align: right;
 
-    .meow-enter-transition(0.01, translate(0, 20px), 0.2s);
+    .unwidgets-form-enter-transition(0.01, translate(0, 20px), 0.2s);
 
-    > .meow-footer__error-container {
+    > .unwidgets-form-footer__error-container {
         display: table-cell;
         overflow: hidden;
         vertical-align: middle;
 
         width: 100%;
 
-        > .meow-footer__error-text {
+        > .unwidgets-form-footer__error-text {
             display: block;
             padding-right: @outerMargin;
 
             color: #c0392b;
             font: 700 14px/1 'Open Sans', sans;
 
-            .meow-enter-transition(0.01, translate(100%, 0), 0.4s);
+            .unwidgets-form-enter-transition(0.01, translate(100%, 0), 0.4s);
         }
     }
 
@@ -97,11 +97,11 @@
         display: table-cell;
 
         margin: 0;
-        .meow-button();
+        .unwidgets-form-button();
     }
 }
 
-.meow-field {
+.unwidgets-form-field {
     position: relative;
 
     // @todo local reset
@@ -109,9 +109,9 @@
 
     margin: @outerMargin 0;
 
-    .meow-enter-transition(0.01, scale(1.2), 0.1s);
+    .unwidgets-form-enter-transition(0.01, scale(1.2), 0.1s);
 
-    > .meow-field__label-text {
+    > .unwidgets-form-field__label-text {
         color: #2c3e50;
         font: 300 18px/1 'Open Sans Condensed', sans;
         min-height: 1em;
@@ -143,7 +143,7 @@
         border-color: #95a5a6;
     }
 
-    > .meow-field__error-text {
+    > .unwidgets-form-field__error-text {
         position: absolute;
         display: block; // helps default placement
         color: #c0392b;
@@ -155,11 +155,11 @@
 
         text-align: right;
 
-        .meow-enter-transition(0.01, translate(0, 20px), 0.2s);
+        .unwidgets-form-enter-transition(0.01, translate(0, 20px), 0.2s);
     }
 }
 
-.meow-list {
+.unwidgets-form-list {
     // @todo local reset
     display: block;
 
@@ -178,7 +178,7 @@
         margin-bottom: @outerMargin / 2 - 1px;
         border-bottom: 2px solid #95a5a6;
 
-        .meow-transition(0.01, translate(-100%, 0) scale(0.5), 0.2s, 0.01, translate(100%, 0) scale(1.2), 0.2s);
+        .unwidgets-form-transition(0.01, translate(-100%, 0) scale(0.5), 0.2s, 0.01, translate(100%, 0) scale(1.2), 0.2s);
 
         &[transition=leave] {
             position: absolute;
@@ -210,13 +210,13 @@
 
         > div > button {
             margin: 0;
-            .meow-button();
+            .unwidgets-form-button();
         }
     }
 
     > footer {
         > button {
-            .meow-button();
+            .unwidgets-form-button();
         }
     }
 }

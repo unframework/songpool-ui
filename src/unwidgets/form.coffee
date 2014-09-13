@@ -8,19 +8,19 @@
     setTimeout (-> dom.setAttribute 'transition', null), 20 # zero delay is too little sometimes
 
   (viewModel) ->
-    viewModel.meowHeader = () ->
+    viewModel.formHeader = () ->
 
-    viewModel.meowFooter = (options) ->
+    viewModel.formFooter = (options) ->
       options = options or {}
       submitText = options.submit or 'Submit'
       validationErrorText = options.validationError or 'Some fields were entered incorrectly'
 
-      @element 'div.meow-footer', ->
+      @element 'div.unwidgets-form-footer', ->
         transitionIn.call(this)
 
-        @element 'div.meow-footer__error-container', ->
+        @element 'div.unwidgets-form-footer__error-container', ->
           @when (=> @$action.error), ->
-            @element 'div.meow-footer__error-text', ->
+            @element 'div.unwidgets-form-footer__error-text', ->
               transitionIn.call(this)
               @text =>
                 if @action.isValidationError(@$action.error)
@@ -30,27 +30,27 @@
         @element 'button[type=submit]', { disabled: => if @$action.isPending then 'disabled' else null }, ->
           @text submitText
 
-    viewModel.meowText = (options) ->
+    viewModel.formText = (options) ->
       validator = options.validate or ((v) -> v)
 
-      @element 'label.meow-field', { hasError: (=> !!@$parameter.error), isPending: (=> !!@$parameter.isPending) }, ->
+      @element 'label.unwidgets-form-field', { hasError: (=> !!@$parameter.error), isPending: (=> !!@$parameter.isPending) }, ->
         transitionIn.call(this)
 
-        @element 'span.meow-field__label-text', ->
+        @element 'span.unwidgets-form-field__label-text', ->
           @text options.label
         @element 'input[type=text]', ->
           @commit => validator @value()
         @when (=> @$parameter.error), ->
-          @element 'span.meow-field__error-text', ->
+          @element 'span.unwidgets-form-field__error-text', ->
             transitionIn.call(this)
             @text (=> @$parameter.error)
 
-    viewModel.meowList = (options, itemTmpl) ->
+    viewModel.formList = (options, itemTmpl) ->
       validator = options.validate or ((v) -> v)
       addText = options.add or 'Add Item'
       removeText = options.remove or 'Remove'
 
-      @element 'div.meow-list', ->
+      @element 'div.unwidgets-form-list', ->
         @element 'ul', ->
           @region (->), ->
             @parameter ->

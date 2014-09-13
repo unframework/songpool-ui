@@ -1,4 +1,4 @@
-define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction', 'cs!meow'], (Promise, projectorHtml, projectorExpr, projectorAction, meow) ->
+define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction', 'cs!unwidgets-form'], (Promise, projectorHtml, projectorExpr, projectorAction, useForm) ->
   eventualValue = (v) ->
     new Promise((resolve, reject) -> setTimeout (-> resolve(v)), 500)
 
@@ -27,7 +27,7 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction'
       # @todo this could be saved for later appending elsewhere, too
       document.getElementById('container').appendChild(element)
 
-    meow(this)
+    useForm(this)
 
     @element 'div', ->
       @action (data) ->
@@ -35,12 +35,12 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction'
       , ->
         @parameterMap ->
           @form ->
-            @meowHeader()
-            @parameter 'label', -> @meowText label: 'Label', validate: anyText
+            @formHeader()
+            @parameter 'label', -> @formText label: 'Label', validate: anyText
 
             @parameter 'tagList', ->
-              @parameterSet -> @meowList {}, ->
-                @meowText label: 'Tag Name', validate: anyText
+              @parameterSet -> @formList {}, ->
+                @formText label: 'Tag Name', validate: anyText
 
             @parameter 'stopwatch', ->
               isRunning = false
@@ -64,4 +64,4 @@ define ['bluebird', 'cs!projectorHtml', 'cs!projectorExpr', 'cs!projectorAction'
                   @text 'Reset'
                   @on 'click', -> stopwatchSeconds = 0; isRunning = false
 
-            @meowFooter()
+            @formFooter()
