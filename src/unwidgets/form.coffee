@@ -1,4 +1,4 @@
-(if define? then define else ((module) -> window.meow = module()))(->
+(if define? then define else ((module) -> window.useForm = module()))(->
   timeout = (time) ->
     new Promise((resolve) -> setTimeout (-> resolve()), time)
 
